@@ -1,88 +1,99 @@
 from __future__ import annotations
 
-from pathlib import Path
 import json
+import sys
+import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-import pytest
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
-from char_switch_logic import Chain, Preset, PresetExporter, PresetImporter, PresetRepository
-
-
-def create_repository(tmp_path: Path) -> PresetRepository:
-    return PresetRepository(config_dir=tmp_path)
-
-
-def test_loads_default_presets(tmp_path: Path) -> None:
-    repository = create_repository(tmp_path)
-
-    presets = repository.list_presets()
-
-    assert {"de", "sr", "ru"}.issubset(presets.keys())
-    german = repository.get("de")
-    assert german is not None
-    assert german.description
-    # German preset relies mostly on pairs
-    assert all(len(chain.symbols) == 2 or chain.trigger in {'"', "'"} for chain in german.chains)
-    serbian = repository.get("sr")
-    assert serbian is not None
-    assert any("ч" in chain.symbols for chain in serbian.chains)
+from src.char_switch_logic import (  # noqa: E402
+    Chain,
+    Preset,
+    PresetExporter,
+    PresetImporter,
+    PresetRepository,
+)
 
 
-def test_save_and_reload_custom_preset(tmp_path: Path) -> None:
-    repository = create_repository(tmp_path)
-    greek = Preset(
-        name="el",
-        description="Greek transliteration basics.",
-        chains=[Chain(trigger="ch", symbols=["ch", "χ"])],
-    )
+class PresetIOTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temp_dir = TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        self.tmp_path = Path(self.temp_dir.name)
+        self.repository = PresetRepository(config_dir=self.tmp_path)
 
-    saved_path = repository.save_custom(greek)
-    assert saved_path.exists()
+    def test_loads_default_presets(self) -> None:
+        presets = self.repository.list_presets()
+        self.assertTrue({"de", "sr", "ru"}.issubset(presets.keys()))
 
-    # New repository instance should pick up the saved preset automatically.
-    reloaded = create_repository(tmp_path).get("el")
-    assert reloaded is not None
-    assert reloaded.description == "Greek transliteration basics."
-    assert reloaded.chains[0].symbols == ["ch", "χ"]
+        german = self.repository.get("de")
+        self.assertIsNotNone(german)
+        assert german
+        self.assertTrue(german.description)
+        self.assertTrue(all(len(chain.symbols) == 2 or chain.trigger in {'"', "'"} for chain in german.chains))
+
+        serbian = self.repository.get("sr")
+        self.assertIsNotNone(serbian)
+        assert serbian
+        self.assertTrue(any("ч" in chain.symbols for chain in serbian.chains))
+
+    def test_save_and_reload_custom_preset(self) -> None:
+        greek = Preset(
+            name="el",
+            description="Greek transliteration basics.",
+            chains=[Chain(trigger="ch", symbols=["ch", "χ"])],
+        )
+        saved_path = self.repository.save_custom(greek)
+        self.assertTrue(saved_path.exists())
+
+        reloaded = PresetRepository(config_dir=self.tmp_path).get("el")
+        self.assertIsNotNone(reloaded)
+        assert reloaded
+        self.assertEqual(reloaded.description, "Greek transliteration basics.")
+        self.assertEqual(reloaded.chains[0].symbols, ["ch", "χ"])
+
+    def test_export_and_import_roundtrip(self) -> None:
+        german = self.repository.get("de")
+        self.assertIsNotNone(german)
+        assert german
+
+        exporter = PresetExporter(self.repository)
+        export_path = self.tmp_path / "export" / "german.json"
+        output_path = exporter.export("de", export_path)
+        self.assertTrue(output_path.exists())
+
+        data = json.loads(export_path.read_text(encoding="utf-8"))
+        data["name"] = "de_custom"
+        data["description"] = "Modified German preset."
+        export_path.write_text(json.dumps(data), encoding="utf-8")
+
+        with TemporaryDirectory() as target_tmp:
+            repo_import_target = PresetRepository(config_dir=Path(target_tmp))
+            importer = PresetImporter(repo_import_target)
+            imported = importer.import_file(export_path)
+            self.assertEqual(imported.name, "de_custom")
+            self.assertIsNotNone(repo_import_target.get("de_custom"))
+
+    def test_import_requires_overwrite_when_conflicting(self) -> None:
+        exporter = PresetExporter(self.repository)
+        export_path = self.tmp_path / "conflict.json"
+        exporter.export("de", export_path)
+
+        importer = PresetImporter(self.repository)
+        with self.assertRaises(ValueError):
+            importer.import_file(export_path)
+
+        loaded = json.loads(export_path.read_text(encoding="utf-8"))
+        loaded["description"] = "Tweaked description."
+        export_path.write_text(json.dumps(loaded), encoding="utf-8")
+
+        imported = importer.import_file(export_path, overwrite=True)
+        self.assertEqual(imported.description, "Tweaked description.")
 
 
-def test_export_and_import_roundtrip(tmp_path: Path) -> None:
-    repository = create_repository(tmp_path)
-    german = repository.get("de")
-    assert german is not None
-
-    exporter = PresetExporter(repository)
-    export_path = tmp_path / "export" / "german.json"
-    output_path = exporter.export("de", export_path)
-    assert output_path.exists()
-
-    # Modify exported preset and import under a new repository instance.
-    data = json.loads(export_path.read_text(encoding="utf-8"))
-    data["name"] = "de_custom"
-    data["description"] = "Modified German preset."
-    export_path.write_text(json.dumps(data), encoding="utf-8")
-
-    repo_import_target = create_repository(tmp_path / "second_config")
-    importer = PresetImporter(repo_import_target)
-    imported = importer.import_file(export_path)
-
-    assert imported.name == "de_custom"
-    assert repo_import_target.get("de_custom") is not None
-
-
-def test_import_requires_overwrite_when_conflicting(tmp_path: Path) -> None:
-    repository = create_repository(tmp_path)
-    exporter = PresetExporter(repository)
-    export_path = tmp_path / "conflict.json"
-    exporter.export("de", export_path)
-
-    importer = PresetImporter(repository)
-    with pytest.raises(ValueError):
-        importer.import_file(export_path)
-
-    loaded = json.loads(export_path.read_text(encoding="utf-8"))
-    loaded["description"] = "Tweaked description."
-    export_path.write_text(json.dumps(loaded), encoding="utf-8")
-
-    imported = importer.import_file(export_path, overwrite=True)
-    assert imported.description == "Tweaked description."
+if __name__ == "__main__":
+    unittest.main()

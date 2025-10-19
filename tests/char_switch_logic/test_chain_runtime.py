@@ -1,96 +1,117 @@
 from __future__ import annotations
 
-from char_switch_logic import ChainResolver, HotkeyChainService, PresetRepository
+import sys
+import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.char_switch_logic import (  # noqa: E402
+    ChainResolver,
+    HotkeyChainService,
+    PresetRepository,
+)
 
 
-def make_service(preset_name: str, tmp_path) -> HotkeyChainService:
-    repository = PresetRepository(config_dir=tmp_path)
-    preset = repository.get(preset_name)
-    assert preset is not None
-    resolver = ChainResolver(preset)
-    return HotkeyChainService(resolver)
+class ChainRuntimeTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temp_dir = TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        self.tmp_path = Path(self.temp_dir.name)
+
+    def make_service(self, preset_name: str) -> HotkeyChainService:
+        repository = PresetRepository(config_dir=self.tmp_path)
+        preset = repository.get(preset_name)
+        self.assertIsNotNone(preset, f"Preset {preset_name} should be available.")
+        assert preset
+        resolver = ChainResolver(preset)
+        return HotkeyChainService(resolver)
+
+    def test_multi_letter_priority_wins_over_single_letter(self) -> None:
+        service = self.make_service("ru")
+
+        result = service.apply("bl", cursor=2)
+        self.assertIsNotNone(result)
+        assert result
+        self.assertEqual(result.current, "ъ")
+        self.assertEqual((result.start, result.end), (0, 1))
+
+        second = service.apply(result.text, cursor=1)
+        self.assertIsNotNone(second)
+        assert second
+        self.assertEqual(second.current, "bl")
+        self.assertEqual((second.start, second.end), (0, 2))
+
+    def test_selection_cycles_through_chain(self) -> None:
+        service = self.make_service("de")
+        text = "Über"
+
+        result = service.apply(text, cursor=0, selection=(0, 1))
+        self.assertIsNotNone(result)
+        assert result
+        self.assertEqual(result.text, "Uber")
+        self.assertEqual(result.current, "U")
+        self.assertEqual(result.previous, "Ü")
+
+        next_result = service.apply(result.text, cursor=0, selection=(0, 1))
+        self.assertIsNotNone(next_result)
+        assert next_result
+        self.assertEqual(next_result.text, text)
+
+    def test_longer_chain_symbols_take_precedence(self) -> None:
+        service = self.make_service("ru")
+
+        result = service.apply("shch", cursor=4)
+        self.assertIsNotNone(result)
+        assert result
+        self.assertEqual(result.current, "щ")
+
+        revert = service.apply(result.text, cursor=len(result.text))
+        self.assertIsNotNone(revert)
+        assert revert
+        self.assertEqual(revert.current, "shch")
+
+    def test_no_chain_match_returns_none(self) -> None:
+        service = self.make_service("de")
+        self.assertIsNone(service.apply("plain", cursor=5))
+        self.assertIsNone(service.apply("plain", cursor=0, selection=(0, 2)))
+
+    def test_serbian_cyrillic_trigger_cycles(self) -> None:
+        service = self.make_service("sr")
+
+        text = "ч"
+        seen = []
+        for _ in range(6):
+            result = service.apply(text, cursor=len(text))
+            self.assertIsNotNone(result)
+            assert result
+            seen.append(result.current)
+            self.assertIn(result.previous, {"ч", "c", "č", "ć", "ц", "ћ"})
+            text = result.text
+
+        self.assertIn("c", seen)
+        self.assertTrue(any("ч" in value for value in seen))
+        self.assertIn(text, {"ч", "ћ"})
+
+    def test_serbian_soft_sign_pair(self) -> None:
+        service = self.make_service("sr")
+
+        text = "ль"
+        result = service.apply(text, cursor=2)
+        self.assertIsNotNone(result)
+        assert result
+        self.assertEqual(result.previous, "ль")
+        self.assertNotEqual(result.current, "ль")
+        self.assertTrue(any(char in result.current for char in ("l", "љ")))
+
+        third = service.apply(result.text, cursor=len(result.text))
+        self.assertIsNotNone(third)
+        assert third
+        self.assertNotEqual(third.current, result.current)
 
 
-def test_multi_letter_priority_wins_over_single_letter(tmp_path) -> None:
-    service = make_service("ru", tmp_path)
-
-    result = service.apply("bl", cursor=2)
-    assert result is not None
-    assert result.current == "ъ"
-    assert result.start == 0 and result.end == 1
-
-    # Cycling again should bring back the transliteration pair.
-    second = service.apply(result.text, cursor=1)
-    assert second is not None
-    assert second.current == "bl"
-    assert second.start == 0 and second.end == 2
-
-
-def test_selection_cycles_through_chain(tmp_path) -> None:
-    service = make_service("de", tmp_path)
-    text = "Über"
-
-    result = service.apply(text, cursor=0, selection=(0, 1))
-    assert result is not None
-    assert result.text == "Uber"
-    assert result.current == "U"
-    assert result.previous == "Ü"
-
-    # Selecting the updated character should cycle back to the umlaut.
-    next_result = service.apply(result.text, cursor=0, selection=(0, 1))
-    assert next_result is not None
-    assert next_result.text == text
-
-
-def test_longer_chain_symbols_take_precedence(tmp_path) -> None:
-    service = make_service("ru", tmp_path)
-
-    result = service.apply("shch", cursor=4)
-    assert result is not None
-    assert result.current == "щ"
-
-    revert = service.apply(result.text, cursor=len(result.text))
-    assert revert is not None
-    assert revert.current == "shch"
-
-
-def test_no_chain_match_returns_none(tmp_path) -> None:
-    service = make_service("de", tmp_path)
-
-    assert service.apply("plain", cursor=5) is None
-
-    # Selection with no matching chain should also return None.
-    assert service.apply("plain", cursor=0, selection=(0, 2)) is None
-
-
-def test_serbian_cyrillic_trigger_cycles(tmp_path) -> None:
-    service = make_service("sr", tmp_path)
-
-    text = "ч"
-    seen = []
-    for _ in range(6):
-        result = service.apply(text, cursor=len(text))
-        assert result is not None
-        seen.append(result.current)
-        assert result.previous in {"ч", "c", "č", "ć", "ц", "ћ"}
-        text = result.text
-
-    assert "c" in seen
-    assert any("ч" in value for value in seen)
-    assert text in {"ч", "ћ"}
-
-
-def test_serbian_soft_sign_pair(tmp_path) -> None:
-    service = make_service("sr", tmp_path)
-
-    text = "ль"
-    result = service.apply(text, cursor=2)
-    assert result is not None
-    assert result.previous == "ль"
-    assert result.current != "ль"
-    assert any(char in result.current for char in ("l", "љ"))
-
-    # Cycle again to ensure reversibility.
-    third = service.apply(result.text, cursor=len(result.text))
-    assert third is not None
-    assert third.current != result.current
+if __name__ == "__main__":
+    unittest.main()

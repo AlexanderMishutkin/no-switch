@@ -4,7 +4,7 @@
 This repository targets Python 3.13 (see `.venv/`). Place production modules under `src/` and ensure each subpackage exposes a clear `__all__`. Tests belong in `tests/`. Docs belogs to `docs/`. Always respect the structure and naming conventions already established in the project, and keep `ai_instructions/STRUCTURE.md` updated with directory-level responsibilities (including key subdirectories) and their functionality.
 
 ## Build, Test, and Development Commands
-Create a virtual environment with `python -m venv .venv` if not already present, then activate it and install dependencies via `pip install -r requirements.txt` once those manifests exist. Use `python -m pytest` to run the full test suite, and `pytest tests/test_parser.py -k scenario` for targeted checks. Run `python -m build` before publishing to verify packaging metadata.
+Activate the shared WSL environment via `source /home/ubuntu/.virtualenvs/no-switch/bin/activate`, then manage dependencies with `python -m pip install -r requirements.txt`. Run tests using `python -m unittest discover`. Execute `python -m build` before publishing to verify packaging metadata.
 
 ## Coding Style & Naming Conventions
 Follow PEP 8 with 4-space indents and 120-character lines; format code with `ruff format` and lint using `ruff check`. Module names should be lowercase with underscores, classes in PascalCase. Use typehints wherever it is possible and docstrings only when they are really needed for understanding.
