@@ -1,0 +1,18 @@
+{
+  "name": "sr",
+  "description": "Serbian Latin and Cyrillic pairs for quick script switching.",
+  "chains": [
+    {"trigger": "c", "symbols": ["c", "č", "ć", "ц"]},
+    {"trigger": "C", "symbols": ["C", "Č", "Ć", "Ц"]},
+    {"trigger": "s", "symbols": ["s", "š", "с"]},
+    {"trigger": "S", "symbols": ["S", "Š", "С"]},
+    {"trigger": "z", "symbols": ["z", "ž", "з"]},
+    {"trigger": "Z", "symbols": ["Z", "Ž", "З"]},
+    {"trigger": "dj", "symbols": ["dj", "đ", "ђ"]},
+    {"trigger": "Dj", "symbols": ["Dj", "Đ", "Ђ"]},
+    {"trigger": "lj", "symbols": ["lj", "љ"]},
+    {"trigger": "Lj", "symbols": ["Lj", "Љ"]},
+    {"trigger": "nj", "symbols": ["nj", "њ"]},
+    {"trigger": "Nj", "symbols": ["Nj", "Њ"]}
+  ]
+}

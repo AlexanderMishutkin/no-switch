@@ -1,0 +1,16 @@
+{
+  "name": "de",
+  "description": "German umlaut cycles and typographic punctuation pairs.",
+  "chains": [
+    {"trigger": "a", "symbols": ["a", "ä"]},
+    {"trigger": "A", "symbols": ["A", "Ä"]},
+    {"trigger": "o", "symbols": ["o", "ö"]},
+    {"trigger": "O", "symbols": ["O", "Ö"]},
+    {"trigger": "u", "symbols": ["u", "ü"]},
+    {"trigger": "U", "symbols": ["U", "Ü"]},
+    {"trigger": "s", "symbols": ["s", "ß"]},
+    {"trigger": "S", "symbols": ["S", "ẞ"]},
+    {"trigger": "\"", "symbols": ["\"", "„", "“"]},
+    {"trigger": "'", "symbols": ["'", "’"]}
+  ]
+}
