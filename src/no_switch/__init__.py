@@ -1,5 +1,5 @@
 """Core package for the No Switch prototype."""
 
-from . import chains, data
+from . import chains, cli, data, hotkey
 
-__all__ = ["chains", "data"]
+__all__ = ["chains", "cli", "data", "hotkey"]

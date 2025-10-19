@@ -20,6 +20,7 @@ The same hotkey works on a single highlighted character, so you can fix typos wi
 - **Run from source:** Use Python 3.13, create a venv with `python -m venv .venv`, activate it, then install dependencies when `requirements.txt` lands.
 - **Try the UI:** Launch the app entry point under `src/` (coming soon) to manage hotkeys, replacement chains, and profile toggles.
 - **Test quickly:** `python -m pytest` runs all checks; focus work with `pytest tests/test_parser.py -k scenario`.
+- **Preview chains:** `python -m no_switch.cli.hotkey --list-chains` lists bundled replacement sets without starting the listener.
 
 ## Build Targets
 We aim to ship native packages for every major desktop platform while keeping a "clone and run" option for contributors.
@@ -36,10 +37,13 @@ Detailed build scripts will live in `docs/` as they solidify.
 
 ## Project Layout
 ```
-src/            Application source code
-tests/          Pytest-based unit and regression suites
-docs/           Human-facing implementation notes
-ai_management/  AI-facing policies, complaint tracking, and automation guides
+src/                 Application source code
+  no_switch/         Core package
+    cli/             Command-line entry points (e.g., hotkey listener)
+    hotkey/          Reusable hotkey runtime and cycler utilities
+tests/               Pytest-based unit and regression suites
+docs/                Human-facing implementation notes
+ai_management/       AI-facing policies, complaint tracking, and automation guides
 ```
 
 ## Roadmap

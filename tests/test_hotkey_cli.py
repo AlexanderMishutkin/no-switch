@@ -1,6 +1,7 @@
 import pytest
 
-from no_switch.poc import ReplacementCycler, describe_cycle
+from no_switch.cli.hotkey import run_command
+from no_switch.hotkey import ReplacementCycler, describe_cycle
 
 
 def test_describe_cycle_returns_cycle_for_known_character():
@@ -24,3 +25,11 @@ def test_describe_cycle_rejects_multi_character_input():
 
     with pytest.raises(ValueError):
         describe_cycle(cycler, "abc")
+
+
+def test_run_command_lists_chains(capsys):
+    exit_code = run_command(["--list-chains"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert "latin" in captured.out
