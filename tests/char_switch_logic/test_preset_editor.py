@@ -1,19 +1,8 @@
 from __future__ import annotations
 
-import sys
 import unittest
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from src.char_switch_logic import (  # noqa: E402
-    Chain,
-    ChainPriorityManager,
-    Preset,
-    PresetEditor,
-)
+from src.char_switch_logic.preset_editor import ChainPriorityManager, PresetEditor
+from src.char_switch_logic.preset_io import Chain, Preset
 
 
 def sample_preset() -> Preset:

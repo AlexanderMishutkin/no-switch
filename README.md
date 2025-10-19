@@ -17,9 +17,10 @@ The same hotkey works on a single highlighted character, so you can fix typos wi
 - Profiles for different languages or workflows, plus an easy-to-sync settings file.
 
 ## Getting Started
-- **Run from source:** Use Python 3.13, create a venv with `python -m venv .venv`, activate it, then install dependencies when `requirements.txt` lands.
+- **Activate the environment:** `source /home/ubuntu/.virtualenvs/no-switch/bin/activate` (WSL shared venv).
+- **Install project deps:** `python -m pip install -r requirements.txt` (currently minimal).
+- **Run tests:** `python -m unittest discover -s tests`.
 - **Try the UI:** Launch the app entry point under `src/` (coming soon) to manage hotkeys, replacement chains, and profile toggles.
-- **Test quickly:** `python -m pytest` runs all checks; focus work with `pytest tests/test_parser.py -k scenario`.
 
 ## Build Targets
 We aim to ship native packages for every major desktop platform while keeping a "clone and run" option for contributors.
@@ -38,7 +39,7 @@ Detailed build scripts will live in `docs/` as they solidify.
 ## Project Layout
 ```
 src/           Application source code
-tests/         Pytest-based unit and regression suites
+tests/         Unittest-based unit and regression suites
 docs/          Additional documentation
 ```
 
@@ -55,7 +56,7 @@ docs/          Additional documentation
 ## Contributing
 - Branch from `main` using `feat/<short-name>` or `bug/<short-name>`.
 - Keep commits in present-tense imperative voice.
-- Run `ruff format`, `ruff check`, and `python -m pytest --cov=src --cov-report=term-missing` before opening a PR.
+- Run `ruff format`, `ruff check`, and `python -m unittest discover -s tests` before opening a PR.
 - Document UI changes with screenshots or GIFs.
 
 ## License

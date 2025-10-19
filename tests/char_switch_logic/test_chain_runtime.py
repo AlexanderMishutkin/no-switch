@@ -1,19 +1,11 @@
 from __future__ import annotations
 
-import sys
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from src.char_switch_logic import (  # noqa: E402
-    ChainResolver,
-    HotkeyChainService,
-    PresetRepository,
-)
+from src.char_switch_logic.chain_runtime import ChainResolver, HotkeyChainService
+from src.char_switch_logic.preset_io import PresetRepository
 
 
 class ChainRuntimeTests(unittest.TestCase):
