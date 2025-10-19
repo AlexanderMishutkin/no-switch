@@ -1,0 +1,30 @@
+{
+  "name": "ru",
+  "description": "Russian transliteration chains prioritizing multi-letter triggers.",
+  "chains": [
+    {"trigger": "shch", "symbols": ["shch", "щ"]},
+    {"trigger": "sh", "symbols": ["sh", "ш"]},
+    {"trigger": "zh", "symbols": ["zh", "ж"]},
+    {"trigger": "kh", "symbols": ["kh", "х"]},
+    {"trigger": "ts", "symbols": ["ts", "ц"]},
+    {"trigger": "ya", "symbols": ["ya", "я"]},
+    {"trigger": "yu", "symbols": ["yu", "ю"]},
+    {"trigger": "ye", "symbols": ["ye", "е"]},
+    {"trigger": "yo", "symbols": ["yo", "ё"]},
+    {"trigger": "bl", "symbols": ["bl", "ы", "ъ"]},
+    {"trigger": "b", "symbols": ["b", "ь"]},
+    {"trigger": "Shch", "symbols": ["Shch", "Щ"]},
+    {"trigger": "Sh", "symbols": ["Sh", "Ш"]},
+    {"trigger": "Zh", "symbols": ["Zh", "Ж"]},
+    {"trigger": "Kh", "symbols": ["Kh", "Х"]},
+    {"trigger": "Ts", "symbols": ["Ts", "Ц"]},
+    {"trigger": "Ya", "symbols": ["Ya", "Я"]},
+    {"trigger": "Yu", "symbols": ["Yu", "Ю"]},
+    {"trigger": "Ye", "symbols": ["Ye", "Е"]},
+    {"trigger": "Yo", "symbols": ["Yo", "Ё"]},
+    {"trigger": "Bl", "symbols": ["Bl", "Ы", "Ъ"]},
+    {"trigger": "B", "symbols": ["B", "Ь"]},
+    {"trigger": "ly", "symbols": ["ly", "ль", "l", "л"]},
+    {"trigger": "Ly", "symbols": ["Ly", "Ль", "L", "Л"]}
+  ]
+}
