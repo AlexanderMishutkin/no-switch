@@ -18,4 +18,4 @@ Commits use present-tense imperatives like “Add parser validation,” mirrorin
 Each feature or enhancement must be done in a separate branch. Branch naming `feat/feature-description-short` or `bug/bug-description`
 
 ## Complaint Handling
-Document every code complaint inside `ai_instructions/COMPLAINS.md` using the table format as soon as it surfaces, then correct the underlying issue immediately rather than justifying the existing behavior.
+Document every code complaint inside `ai_instructions/COMPLAINS.md` using the table format as soon as it surfaces, then correct the underlying issue immediately without offering excuses or explanations.
