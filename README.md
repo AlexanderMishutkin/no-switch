@@ -31,8 +31,9 @@ We aim to ship native packages for every major desktop platform while keeping a 
 Detailed build scripts will live in `docs/` as they solidify.
 
 ## Development Docs
-- Project guidelines and contribution workflow: [`docs/AGENTS.md`](docs/AGENTS.md)
-- Packaging notes (upcoming): `docs/packaging.md`
+- Feature walkthroughs and design notes: see files under `docs/`.
+- Character replacement flow: [`docs/CHAR_SWITCH_LOGIC.md`](docs/CHAR_SWITCH_LOGIC.md)
+- Packaging and contributor guides will land in `docs/` as they mature.
 
 ## Project Layout
 ```
