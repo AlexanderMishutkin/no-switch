@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository targets Python 3.13 (see `.venv/`). Place production modules under `src/` and ensure each subpackage exposes a clear `__all__`. Tests belong in `tests/`. Docs belogs to `docs/`. Always respect the structure and naming conventions already established in the project, and keep `ai_instructions/STRUCTURE.md` updated with a directory-level overview focused on responsibilities and functionality.
+This repository targets Python 3.13 (see `.venv/`). Place production modules under `src/` and ensure each subpackage exposes a clear `__all__`. Tests belong in `tests/`. Docs belogs to `docs/`. Always respect the structure and naming conventions already established in the project, and keep `ai_instructions/STRUCTURE.md` updated with directory-level responsibilities (including key subdirectories) and their functionality.
 
 ## Build, Test, and Development Commands
 Create a virtual environment with `python -m venv .venv` if not already present, then activate it and install dependencies via `pip install -r requirements.txt` once those manifests exist. Use `python -m pytest` to run the full test suite, and `pytest tests/test_parser.py -k scenario` for targeted checks. Run `python -m build` before publishing to verify packaging metadata.
