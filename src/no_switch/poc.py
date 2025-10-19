@@ -4,6 +4,12 @@ This script listens for a configurable hotkey (default: ``Alt+Shift+Space``)
 and replaces the most recently typed character with the next variant from the
 bundled replacement chains. Press ``Esc`` to exit.
 
+Utility commands:
+
+* ``--list-chains`` prints the available replacement chain names without
+  starting the keyboard listener.
+* ``--demo <char>`` previews the full cycle and next variant for a character.
+
 Requires: ``pynput`` (install with ``pip install pynput``).
 """
 
@@ -16,6 +22,7 @@ from dataclasses import dataclass
 from typing import Iterable, Optional, TYPE_CHECKING
 
 from .chains import DEFAULT_CHAIN_NAMES, build_reverse_index, load_cycles
+from .data import list_available_chains
 
 try:
     from pynput import keyboard
@@ -52,6 +59,16 @@ def parse_args(argv: Iterable[str]) -> argparse.Namespace:
         default=CHAR_STALE_TIMEOUT,
         help="Seconds after which the last typed character is considered stale.",
     )
+    parser.add_argument(
+        "--list-chains",
+        action="store_true",
+        help="List bundled chain names and exit without starting the listener.",
+    )
+    parser.add_argument(
+        "--demo",
+        metavar="CHAR",
+        help="Preview the cycle for a single character and exit.",
+    )
     return parser.parse_args(list(argv))
 
 
@@ -76,11 +93,42 @@ class ReplacementCycler:
         cycle = self.cycles[base]
         return cycle[(idx + 1) % len(cycle)]
 
+    def cycle_sequence(self, char: str) -> Optional[list[str]]:
+        """Return the ordered cycle for the base character associated with ``char``."""
+        entry = self.reverse_index.get(char)
+        if not entry:
+            return None
+        base, _ = entry
+        return list(self.cycles[base])
+
+
+def describe_cycle(cycler: ReplacementCycler, char: str) -> Optional[str]:
+    """Return a human-readable description of the cycle for ``char``."""
+    if len(char) != 1:
+        raise ValueError("Demo expects a single character.")
+
+    sequence = cycler.cycle_sequence(char)
+    if not sequence:
+        return None
+
+    next_char = cycler.next_variant(char)
+    cycle_str = " -> ".join(sequence + [sequence[0]])
+    return (
+        f"Cycle for '{sequence[0]}': {cycle_str}\n"
+        f"Next after '{char}': {next_char if next_char is not None else sequence[0]}"
+    )
+
 
 class HotkeyApplication:
     """Listen for the hotkey, cycling the last character when activated."""
 
-    def __init__(self, hotkey: str, chains: Iterable[str], timeout: float) -> None:
+    def __init__(
+        self,
+        hotkey: str,
+        chains: Iterable[str],
+        timeout: float,
+        cycler: ReplacementCycler | None = None,
+    ) -> None:
         if keyboard is None:
             message = "pynput is required for this demo. Install it with 'pip install pynput'."
             raise SystemExit(f"{message}\n\nImport error: {_IMPORT_ERROR}")
@@ -88,7 +136,7 @@ class HotkeyApplication:
         self._controller = keyboard.Controller()
         self._hotkey = keyboard.HotKey(keyboard.HotKey.parse(hotkey), self._on_activate)
         self._combo_label = hotkey
-        self._cycler = ReplacementCycler.from_chain_names(chains)
+        self._cycler = cycler or ReplacementCycler.from_chain_names(chains)
         self._timeout = max(0.0, timeout)
 
         self._last_char: Optional[str] = None
@@ -145,7 +193,35 @@ class HotkeyApplication:
 
 def main(argv: Iterable[str] | None = None) -> int:
     args = parse_args(argv or sys.argv[1:])
-    app = HotkeyApplication(args.hotkey, args.chains, args.timeout)
+    if args.list_chains:
+        for name in list_available_chains():
+            print(name)
+        return 0
+
+    try:
+        cycler = ReplacementCycler.from_chain_names(args.chains)
+    except ValueError as exc:
+        print(exc)
+        return 2
+
+    if args.demo is not None:
+        try:
+            report = describe_cycle(cycler, args.demo)
+        except ValueError as exc:
+            print(exc)
+            return 2
+
+        if not report:
+            print(f"No chain defined for '{args.demo}'.")
+            return 1
+        print(report)
+        return 0
+
+    try:
+        app = HotkeyApplication(args.hotkey, args.chains, args.timeout, cycler=cycler)
+    except ValueError as exc:
+        print(exc)
+        return 2
     app.run()
     return 0
 

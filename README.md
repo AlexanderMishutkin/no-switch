@@ -31,14 +31,15 @@ We aim to ship native packages for every major desktop platform while keeping a 
 Detailed build scripts will live in `docs/` as they solidify.
 
 ## Development Docs
-- Project guidelines and contribution workflow: [`docs/AGENTS.md`](docs/AGENTS.md)
+- Project guidelines and AI workflows: [`ai_management/AGENTS.md`](ai_management/AGENTS.md)
 - Packaging notes (upcoming): `docs/packaging.md`
 
 ## Project Layout
 ```
-src/           Application source code
-tests/         Pytest-based unit and regression suites
-docs/          Additional documentation
+src/            Application source code
+tests/          Pytest-based unit and regression suites
+docs/           Human-facing implementation notes
+ai_management/  AI-facing policies, complaint tracking, and automation guides
 ```
 
 ## Roadmap
