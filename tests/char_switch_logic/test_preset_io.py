@@ -35,6 +35,12 @@ class PresetIOTests(unittest.TestCase):
         self.assertIsNotNone(serbian)
         assert serbian
         self.assertTrue(any("ч" in chain.symbols for chain in serbian.chains))
+        self.assertTrue(any(chain.trigger == "ч" for chain in serbian.chains))
+
+        russian = self.repository.get("ru")
+        self.assertIsNotNone(russian)
+        assert russian
+        self.assertTrue(any(chain.trigger == "bl" and "ы" in chain.symbols for chain in russian.chains))
 
     def test_save_and_reload_custom_preset(self) -> None:
         greek = Preset(

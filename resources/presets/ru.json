@@ -11,7 +11,7 @@
     {"trigger": "yu", "symbols": ["yu", "ю"]},
     {"trigger": "ye", "symbols": ["ye", "е"]},
     {"trigger": "yo", "symbols": ["yo", "ё"]},
-    {"trigger": "bl", "symbols": ["bl", "ъ"]},
+    {"trigger": "bl", "symbols": ["bl", "ы", "ъ"]},
     {"trigger": "b", "symbols": ["b", "ь"]},
     {"trigger": "Shch", "symbols": ["Shch", "Щ"]},
     {"trigger": "Sh", "symbols": ["Sh", "Ш"]},
@@ -22,7 +22,7 @@
     {"trigger": "Yu", "symbols": ["Yu", "Ю"]},
     {"trigger": "Ye", "symbols": ["Ye", "Е"]},
     {"trigger": "Yo", "symbols": ["Yo", "Ё"]},
-    {"trigger": "Bl", "symbols": ["Bl", "Ъ"]},
+    {"trigger": "Bl", "symbols": ["Bl", "Ы", "Ъ"]},
     {"trigger": "B", "symbols": ["B", "Ь"]},
     {"trigger": "ly", "symbols": ["ly", "ль", "l", "л"]},
     {"trigger": "Ly", "symbols": ["Ly", "Ль", "L", "Л"]}

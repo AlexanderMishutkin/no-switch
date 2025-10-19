@@ -28,14 +28,18 @@ class ChainRuntimeTests(unittest.TestCase):
         result = service.apply("bl", cursor=2)
         self.assertIsNotNone(result)
         assert result
-        self.assertEqual(result.current, "ъ")
+        self.assertEqual(result.current, "ы")
         self.assertEqual((result.start, result.end), (0, 1))
 
         second = service.apply(result.text, cursor=1)
         self.assertIsNotNone(second)
         assert second
-        self.assertEqual(second.current, "bl")
-        self.assertEqual((second.start, second.end), (0, 2))
+        self.assertEqual(second.current, "ъ")
+
+        third = service.apply(second.text, cursor=1)
+        self.assertIsNotNone(third)
+        assert third
+        self.assertEqual(third.current, "bl")
 
     def test_selection_cycles_through_chain(self) -> None:
         service = self.make_service("de")
