@@ -16,3 +16,6 @@ Rely on `pytest` with plain asserts and fixtures in `tests/conftest.py`. New fea
 Commits use present-tense imperatives like “Add parser validation,” mirroring the existing history. Keep changes scoped and include context in the body when touching multiple areas. Pull requests must describe motivation, summarize the solution, link related issues, and provide screenshots or logs when behavior changes. Confirm lint and test commands pass before requesting review.
 
 Each feature or enhancement must be done in a separate branch. Branch naming `feat/feature-description-short` or `bug/bug-description`
+
+## Communication Principles
+Keep status updates and documentation consistent in tone and length: be concise, avoid unnecessary verbosity, and prioritize clarity over flourish. Align terminology across files so contributors never have to guess which label refers to which component.
