@@ -5,8 +5,8 @@ from __future__ import annotations
 import sys
 from typing import Iterable
 
-from ..data import list_available_chains
 from ..hotkey import HotkeyApplication, ReplacementCycler, describe_cycle, _IMPORT_ERROR, keyboard
+from ..resources import list_available_chains
 from .arguments import parse_args
 
 __all__ = ["main"]

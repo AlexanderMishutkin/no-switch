@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Iterable
 
-from . import data
+from . import resources as resources_mod
 
 DEFAULT_CHAIN_NAMES: tuple[str, ...] = ("latin", "cyrillic")
 
@@ -15,7 +15,7 @@ def load_cycles(chain_names: Iterable[str] = DEFAULT_CHAIN_NAMES) -> dict[str, l
     """Return a mapping of base characters to replacement cycles."""
     merged: dict[str, list[str]] = {}
     for name in chain_names:
-        definitions = data.load_chain(name)
+        definitions = resources_mod.load_chain(name)
         for base, variants in definitions.items():
             cycle = [base] + [v for v in variants if v and v != base]
             if base in merged:

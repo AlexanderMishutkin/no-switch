@@ -4,7 +4,7 @@ Status legend: **Open** = fix pending; **Resolved** = verified fix delivered.
 
 | ID | Complaint | Raised By | Status | Resolution |
 | --- | --- | --- | --- | --- |
-| C1 | “Why data is placed in SRC!?” | User | Resolved | Documented the packaging rationale in `docs/STRUCTURE.md` explaining why bundled JSON lives under `src/no_switch/data/`. |
+| C1 | “Why data is placed in SRC!?” | User | Resolved | Relocated bundled JSON into `src/no_switch/resources/` and updated documentation to reflect the package resource layout. |
 | C2 | “What the file structure with poc.py?!??! It's not serious enough.” | User | Resolved | Replaced the monolithic `poc.py` with dedicated modules under `src/no_switch/cli/` and `src/no_switch/hotkey/`, and documented the new layout. |
 | C3 | “Make document in DOCS describing project structure and keep it professional.” | User | Resolved | Authored `docs/STRUCTURE.md` with a formal directory overview and growth checklist. |
 | C4 | “Why project structure not structure?” | User | Resolved | Renamed the guide to `STRUCTURE.md` and updated the title to `Structure` for concise naming. |
