@@ -8,3 +8,4 @@
 | C4 | “Why project structure not structure?” | User | Resolved | Renamed the guide to `STRUCTURE.md` and updated the title to `Structure` for concise naming. |
 | C5 | “Modify your agents.md stating to be non too verbose and consistent.” | User | Resolved | Added a “Communication Principles” section to `docs/AGENTS.md` emphasizing concise, consistent messaging. |
 | C6 | “Why the heck some readme files are lowercase and other upper case?” | User | Resolved | Normalized documentation naming by renaming `docs/stack.md` to `docs/STACK.md` and aligning references. |
+| C7 | “Again - when I do complain - you fix it.” | User | Resolved | Codified the expectation in `docs/AGENTS.md` within the Communication Principles section. |

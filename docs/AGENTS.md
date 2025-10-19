@@ -18,4 +18,4 @@ Commits use present-tense imperatives like “Add parser validation,” mirrorin
 Each feature or enhancement must be done in a separate branch. Branch naming `feat/feature-description-short` or `bug/bug-description`
 
 ## Communication Principles
-Keep status updates and documentation consistent in tone and length: be concise, avoid unnecessary verbosity, and prioritize clarity over flourish. Align terminology across files so contributors never have to guess which label refers to which component.
+Keep status updates and documentation consistent in tone and length: be concise, avoid unnecessary verbosity, and prioritize clarity over flourish. Align terminology across files so contributors never have to guess which label refers to which component. Whenever a maintainer raises a complaint or request, acknowledge it immediately and deliver the requested fix without delay or scope drift.
