@@ -1,21 +1,9 @@
 # Current Project Structure
 _Last updated: 2025-10-19_
 
-- `LICENSE` - repository license information.
-- `README.md` - overview and quickstart notes.
-- `ai_instructions/` - agent-facing guidelines and logs.
-  - `AGENTS.md` - operational rules for agents.
-  - `COMPLAINS.md` - complaint log with fixes.
-  - `STRUCTURE.md` - this structure reference document.
-- `docs/`
-  - `CHAR_SWITCH_LOGIC.md` - overview of character switching flow.
-- `resources/` - auxiliary assets and reference materials.
-- `src/` - production Python packages and entrypoints.
-  - `main.py` - primary application bootstrap.
-  - `char_switch_logic/`
-    - `__init__.py` - exports character switch utilities.
-  - `gui/`
-    - `__init__.py` - GUI module exports.
-  - `hotkeys/`
-    - `__init__.py` - hotkey bindings package exports.
-- `tests/` - pytest test suite placeholder.
+- Root files (`LICENSE`, `README.md`) - legal notice and contributor-facing overview.
+- `ai_instructions/` - governance for automated agents, including operating rules, complaint log, and this structure record.
+- `docs/` - human-facing documentation that explains features, design decisions, and contributor workflows.
+- `resources/` - default character replacement chains and other runtime assets shipped with the app.
+- `src/` - application source code covering the CLI entry point, character switching logic, GUI shell, and hotkey integration packages.
+- `tests/` - pytest suite (currently a placeholder) for unit and regression coverage.
