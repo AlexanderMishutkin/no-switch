@@ -23,6 +23,9 @@ def test_loads_default_presets(tmp_path: Path) -> None:
     assert german.description
     # German preset relies mostly on pairs
     assert all(len(chain.symbols) == 2 or chain.trigger in {'"', "'"} for chain in german.chains)
+    serbian = repository.get("sr")
+    assert serbian is not None
+    assert any("ч" in chain.symbols for chain in serbian.chains)
 
 
 def test_save_and_reload_custom_preset(tmp_path: Path) -> None:

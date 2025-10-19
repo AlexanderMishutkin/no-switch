@@ -39,7 +39,7 @@ Custom presets live in the user configuration directory (exact path TBD) and ove
 
 ## Chain Resolution Rules
 
-- Chains are looked up by the currently selected character (case-sensitive by default).
+- Chains are looked up by the currently selected character (case-sensitive by default) and may contain Latin, Cyrillic, or mixed triggers so users can start cycling from either script.
 - Chain order matters: the engine evaluates chains from highest to lowest priority, allowing multi-character triggers (like `bl`) to match before single-character fallbacks (`b`).
 - If a character belongs to multiple chains, the most specific chain (e.g., matching script and case) wins. Collision resolution strategy (priority order or last-write wins) must be defined in the implementation.
 - When a chain is exhausted, the next hotkey event cycles back to the starting character.

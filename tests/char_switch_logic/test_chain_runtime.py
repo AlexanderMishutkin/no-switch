@@ -61,3 +61,36 @@ def test_no_chain_match_returns_none(tmp_path) -> None:
 
     # Selection with no matching chain should also return None.
     assert service.apply("plain", cursor=0, selection=(0, 2)) is None
+
+
+def test_serbian_cyrillic_trigger_cycles(tmp_path) -> None:
+    service = make_service("sr", tmp_path)
+
+    text = "ч"
+    seen = []
+    for _ in range(6):
+        result = service.apply(text, cursor=len(text))
+        assert result is not None
+        seen.append(result.current)
+        assert result.previous in {"ч", "c", "č", "ć", "ц", "ћ"}
+        text = result.text
+
+    assert "c" in seen
+    assert any("ч" in value for value in seen)
+    assert text in {"ч", "ћ"}
+
+
+def test_serbian_soft_sign_pair(tmp_path) -> None:
+    service = make_service("sr", tmp_path)
+
+    text = "ль"
+    result = service.apply(text, cursor=2)
+    assert result is not None
+    assert result.previous == "ль"
+    assert result.current != "ль"
+    assert any(char in result.current for char in ("l", "љ"))
+
+    # Cycle again to ensure reversibility.
+    third = service.apply(result.text, cursor=len(result.text))
+    assert third is not None
+    assert third.current != result.current

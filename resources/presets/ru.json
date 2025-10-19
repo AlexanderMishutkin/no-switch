@@ -23,6 +23,8 @@
     {"trigger": "Ye", "symbols": ["Ye", "Е"]},
     {"trigger": "Yo", "symbols": ["Yo", "Ё"]},
     {"trigger": "Bl", "symbols": ["Bl", "Ъ"]},
-    {"trigger": "B", "symbols": ["B", "Ь"]}
+    {"trigger": "B", "symbols": ["B", "Ь"]},
+    {"trigger": "ly", "symbols": ["ly", "ль", "l", "л"]},
+    {"trigger": "Ly", "symbols": ["Ly", "Ль", "L", "Л"]}
   ]
 }

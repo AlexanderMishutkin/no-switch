@@ -1,18 +1,18 @@
 {
   "name": "sr",
-  "description": "Serbian Latin and Cyrillic pairs for quick script switching.",
+  "description": "Serbian Latin and Cyrillic pairs for quick script switching from either script.",
   "chains": [
-    {"trigger": "c", "symbols": ["c", "č", "ć", "ц"]},
-    {"trigger": "C", "symbols": ["C", "Č", "Ć", "Ц"]},
-    {"trigger": "s", "symbols": ["s", "š", "с"]},
-    {"trigger": "S", "symbols": ["S", "Š", "С"]},
-    {"trigger": "z", "symbols": ["z", "ž", "з"]},
-    {"trigger": "Z", "symbols": ["Z", "Ž", "З"]},
-    {"trigger": "dj", "symbols": ["dj", "đ", "ђ"]},
-    {"trigger": "Dj", "symbols": ["Dj", "Đ", "Ђ"]},
-    {"trigger": "lj", "symbols": ["lj", "љ"]},
-    {"trigger": "Lj", "symbols": ["Lj", "Љ"]},
-    {"trigger": "nj", "symbols": ["nj", "њ"]},
-    {"trigger": "Nj", "symbols": ["Nj", "Њ"]}
+    {"trigger": "c", "symbols": ["c", "č", "ć", "ц", "ћ", "ч"]},
+    {"trigger": "C", "symbols": ["C", "Č", "Ć", "Ц", "Ћ", "Ч"]},
+    {"trigger": "s", "symbols": ["s", "š", "с", "ш"]},
+    {"trigger": "S", "symbols": ["S", "Š", "С", "Ш"]},
+    {"trigger": "z", "symbols": ["z", "ž", "з", "ж"]},
+    {"trigger": "Z", "symbols": ["Z", "Ž", "З", "Ж"]},
+    {"trigger": "dj", "symbols": ["dj", "đ", "ђ", "dž", "џ"]},
+    {"trigger": "Dj", "symbols": ["Dj", "Đ", "Ђ", "Dž", "Џ"]},
+    {"trigger": "lj", "symbols": ["lj", "љ", "ль", "l", "л"]},
+    {"trigger": "Lj", "symbols": ["Lj", "Љ", "Ль", "L", "Л"]},
+    {"trigger": "nj", "symbols": ["nj", "њ", "нь", "n", "н"]},
+    {"trigger": "Nj", "symbols": ["Nj", "Њ", "Нь", "N", "Н"]}
   ]
 }
